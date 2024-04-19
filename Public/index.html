@@ -1,72 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User API Documentation</title>
-    <!-- ----- ALL link tag send a GET request ------ -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User API Documentation</title>
+  <!-- ALL link tag send a GET request -->
+  <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+  <h1 class="text-center">User API</h1>
+  <p class="text-center">Welcome! Feel free to use our API and have fun!</p>
 
-<link rel="stylesheet" href="./css/style.css">
+  <hr>
 
-    </head>
-    <body>
-    <h1 class="text-center">User API</h1>
-        <p>Welcome Feel free to use our API and have fun!</p>
-    <hr>
-    <h2>Routes:</h2>
-  
-    
-    <div >
-        <p class="route"><span> GET /api/users/</span> - Returns all users</p>
-        <p class="route"><span> GET /api/users/:ID</span> - Returns a single user by ID</p>
+  <h2>Routes:</h2>
 
-        <p class="route"><span> POST /api/users/:ID</span> - Returns a single user by ID</p>
-    </div>
+  <div>
+    <p class="route"><span>GET /api/users</span> - Returns all users</p>
+    <p class="route"><span>GET /api/users/:ID</span> - Returns a single user by ID</p>
+    <p class="route"><span>POST /api/users</span> - Add a user | You can use the form below or send a JSON request in the following format:</p>
+    <pre>
+      {
+        name: USER_NAME,
+        age: USER_AGE
+      }
+    </pre>
+    <p class="route"><span>DELETE /api/users/:ID</span> - Deletes a single user by ID</p>
+  </div>
 
-        <form action="/api/users/form" method="POST">
-            <input name="FullName" type="text" placeholder="Type ypur Name">
-            <button>Submit</button>
-        </form>
+  <!-- <form action="/api/users/form" method="POST">
+    <input name="fullName" type="text" placeholder="Type your name">
+    <button>Submit</button>
+  </form> -->
 
-    <form id="user-form" action="/api/users/form" method="post">
-        <h2>User Form</h2>
-        <input name="name" type="text" placeholder="Type your name ">
-        <input name="age"  type="text" placeholder="Type your age">
-        <button>Submit</button>
-    </form>
-    <script>
-        fetch('/api/users') //GET
-            .then(res => res.json())
-            .then(data => {
-                console.log(data)
-            })
-            const userForm = document.querySelector('#user-form')
+  <form id="user-form" action="/api/users" method="POST">
+    <h2 class="text-center">User Form</h2>
+    <input name="name" type="text" placeholder="Type your name">
+    <input name="age" type="text" placeholder="Type your age">
+    <button>Submit</button>
+  </form>
 
-            userForm.addEventListener('submit',(event) => {
-                event.preventDefault();
+  <script>
+    fetch('/api/users') // GET
+      .then(res => res.json())
+      .then(data => {
+        console.log(data)
+      })
+
+    const userForm = document.querySelector('#user-form')
+
+    userForm.addEventListener('submit', (event) => {
+      event.preventDefault()
+
+      const nameInput = event.target.name
+      const ageInput = event.target.age
 
 
-                const nameInput = event.target.name
-                const ageInput = event.target.age
+      if (!nameInput.value || !ageInput.value) {
+        return alert('You must enter a name and an age.')
+      }
 
-                fetch('/api/users', {
-                    method: POST,
-                    headers: {
-                        'Content-type': 'applications json',
-                    },
-                    body: JSON.stringify({
-                        name: nameInput.value,
-                        age: ageInput.value
-                    })
-                })
-                .then(res=>res.json())
-                .then((data) => {
-                alert(data.message);
-
-                nameInput.value =  ''
-                ageInput.value = ''
-            })
+      fetch('/api/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          name: nameInput.value,
+          age: ageInput.value
         })
-    </script>
+      })
+        .then(res => res.json())
+        .then(data => {
+          alert(data.message)
+
+          nameInput.value = ''
+          ageInput.value = ''
+        })
+    })
+  </script>
 </body>
 </html>
